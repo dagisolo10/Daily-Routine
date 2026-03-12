@@ -3,6 +3,8 @@ import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/sonner";
 import { Manrope, Playfair_Display, Poppins } from "next/font/google";
+import ServiceRegister from "@/components/cache/service-register";
+import UpdateNotification from "@/components/common/update-notification";
 
 const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope" });
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
@@ -17,6 +19,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     return (
         <html lang="en">
             <body className={cn("relative min-h-dvh px-4! py-6! antialiased", manrope.variable, playfair.variable, poppins.variable)}>
+                <ServiceRegister />
+                <UpdateNotification />
                 {children}
                 <Toaster position="top-center" toastOptions={{ classNames: { description: "!text-current !opacity-100" } }} />
             </body>
