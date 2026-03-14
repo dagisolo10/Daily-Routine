@@ -5,6 +5,9 @@ import { Toaster } from "@/components/ui/sonner";
 import { Manrope, Playfair_Display, Poppins } from "next/font/google";
 import ServiceRegister from "@/components/cache/service-register";
 import UpdateNotification from "@/components/common/update-notification";
+import Navbar from "@/components/common/navbar";
+import StatsContextProvider from "@/components/task/stats-context";
+import ThemeProvider from "@/components/common/theme-provider";
 
 const manrope = Manrope({ subsets: ["latin"], variable: "--font-manrope" });
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" });
@@ -17,12 +20,17 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
-        <html lang="en">
-            <body className={cn("relative min-h-dvh px-4! py-6! antialiased", manrope.variable, playfair.variable, poppins.variable)}>
-                <ServiceRegister />
-                <UpdateNotification />
-                {children}
-                <Toaster position="top-center" toastOptions={{ classNames: { description: "!text-current !opacity-100" } }} />
+        <html lang="en" suppressHydrationWarning>
+            <body className={cn("relative min-h-dvh px-4! py-6! pb-32! antialiased", manrope.variable, playfair.variable, poppins.variable)}>
+                <ThemeProvider attribute="class" enableSystem disableTransitionOnChange>
+                    <StatsContextProvider>
+                        <ServiceRegister />
+                        <UpdateNotification />
+                        {children}
+                        <Navbar />
+                        <Toaster position="top-center" toastOptions={{ classNames: { description: "!text-current !opacity-100" } }} />
+                    </StatsContextProvider>
+                </ThemeProvider>
             </body>
         </html>
     );

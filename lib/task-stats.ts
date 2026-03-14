@@ -1,24 +1,17 @@
-import { addDays, differenceInDays, endOfWeek, startOfDay, startOfWeek } from "date-fns";
+import { addDays, differenceInDays, endOfDay, endOfWeek, startOfDay, startOfWeek } from "date-fns";
 import { dexie, ProfileMilestones } from "./db";
+import { totalTaskCount } from "./actions";
 
 export const taskStats = async () => {
     const [totalTasks, completedToday, weeklyProgress, { currentStreak, longestStreak }, consistency] = await Promise.all([
-        dexie.task.count(),
+        totalTaskCount(endOfDay(new Date())),
         getCompletedTodayCount(),
         calculateWeeklyProgress(),
         getStreaks(),
         calculateTotalConsistency(),
     ]);
 
-    return {
-        totalTasks,
-        completedToday,
-        weeklyProgress,
-        currentStreak,
-        longestStreak,
-        nextAchievement: getNextAchievement(currentStreak),
-        consistency,
-    };
+    return { totalTasks, completedToday, weeklyProgress, currentStreak, longestStreak, nextAchievement: getNextAchievement(longestStreak), consistency };
 };
 
 async function getCompletedTodayCount() {
@@ -34,8 +27,8 @@ async function getStreaks() {
     return { currentStreak: profile.currentStreak || 0, longestStreak: profile.longestStreak || 0 };
 }
 
-function getNextAchievement(currentStreak: number) {
-    return Object.entries(ProfileMilestones).find(([days]) => currentStreak < Number(days))?.[1];
+function getNextAchievement(streak: number) {
+    return Object.entries(ProfileMilestones).find(([days]) => streak < Number(days))?.[1];
 }
 
 async function calculateWeeklyProgress() {
@@ -51,13 +44,13 @@ async function calculateWeeklyProgress() {
         const day = addDays(start, i);
         if (day > today) break;
 
-        totalPossibleLogs += tasks.filter((task) => startOfDay(task.createdAt) <= day).length;
+        totalPossibleLogs += tasks.filter((task) => startOfDay(task.createdAt) <= day).reduce((acc, curr) => acc + curr.frequency, 0);
     }
 
     return totalPossibleLogs > 0 ? Math.round((logs / totalPossibleLogs) * 100) : 0;
 }
 
-async function calculateTotalConsistency() {
+export async function calculateTotalConsistency() {
     const profile = await dexie.profile.toCollection().first();
     if (!profile) return 0;
 
@@ -70,13 +63,12 @@ async function calculateTotalConsistency() {
     let totalPercentage = 0;
 
     for (let i = 0; i < totalDays; i++) {
-        const currentDay = addDays(start, i);
-        const time = currentDay.getTime();
+        const currentTime = addDays(start, i).getTime();
 
-        const tasksOnDay = allTasks.filter((task) => startOfDay(task.createdAt).getTime() <= time).length;
+        const tasksOnDay = allTasks.filter((task) => startOfDay(task.createdAt).getTime() <= currentTime).reduce((acc, curr) => acc + curr.frequency, 0);
         if (tasksOnDay === 0) continue;
 
-        const logsOnDay = allLogs.filter((log) => startOfDay(log.date).getTime() === time).length;
+        const logsOnDay = allLogs.filter((log) => startOfDay(log.date).getTime() === currentTime).length;
 
         totalPercentage += (logsOnDay / tasksOnDay) * 100;
     }

@@ -1,12 +1,10 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { dexie } from "@/lib/db";
-import TaskCard from "./task-card";
-import { useRef } from "react";
+import {TaskCard} from "./task-card";
 import { AnimatePresence } from "framer-motion";
 
 export default function DailyTasks() {
     const tasks = useLiveQuery(() => dexie.task.toArray()) || [];
-    const scrollRef = useRef<HTMLDivElement>(null);
 
     return (
         <div className="space-y-2">
@@ -20,8 +18,8 @@ export default function DailyTasks() {
                     <div>Empty</div>
                 ) : (
                     <AnimatePresence mode="popLayout">
-                        {tasks.map((task, index) => (
-                            <div ref={index === tasks.length - 1 ? scrollRef : null} key={task.id}>
+                        {tasks.map((task) => (
+                            <div key={task.id}>
                                 <TaskCard task={task} />
                             </div>
                         ))}
