@@ -13,6 +13,7 @@ export const profileStats = async () => {
 async function getProfileDetails(profile: Profile) {
     return {
         name: profile?.name,
+        avatar: profile.avatar,
         age: profile?.age,
         joinedAt: profile?.createdAt,
         perfectDays: profile?.perfectDays || 0,

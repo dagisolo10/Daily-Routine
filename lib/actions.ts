@@ -115,3 +115,18 @@ export async function getTaskBadge(taskId: number, currentStreak: number) {
 
     return earned;
 }
+
+export async function updateProfile(data: { name: string; age: number }) {
+    try {
+        const profile = await dexie.profile.toCollection().first();
+
+        if (!profile || !profile.id) throw new Error("Profile not found");
+
+        await dexie.profile.update(profile.id, { name: data.name, age: data.age });
+
+        return { success: true };
+    } catch (error) {
+        console.error("Update failed:", error);
+        return { success: false, error };
+    }
+}

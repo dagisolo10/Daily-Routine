@@ -46,7 +46,7 @@ export default function UpdateNotification() {
     if (!showUpdate) return null;
 
     return (
-        <div className="animate-in fade-in slide-in-from-bottom-4 fixed right-6 bottom-6 z-100 duration-500">
+        <div className="animate-in fade-in slide-in-from-top-4 fixed top-6 right-6 z-100 duration-500">
             <div className="flex flex-col gap-3 rounded-xl border border-white/10 bg-black/80 p-4 shadow-2xl backdrop-blur-md">
                 <div className="flex items-center gap-2">
                     <div className="flex size-8 items-center justify-center rounded-full bg-blue-500/20 text-blue-400">

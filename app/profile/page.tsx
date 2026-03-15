@@ -20,6 +20,7 @@ export default function Profile() {
     const { profile } = useStats();
 
     if (!profile) return null;
+    const displayImage = profile.avatar ? URL.createObjectURL(profile.avatar) : "/toji 3.jpg";
 
     return (
         <div className="space-y-8 px-4">
@@ -30,15 +31,11 @@ export default function Profile() {
                     <div className="relative">
                         <div className="grid size-28 place-items-center overflow-hidden rounded-full bg-linear-to-tr from-blue-500 via-indigo-600 to-purple-700 p-1 shadow-[0_0_40px_-10px_rgba(59,130,246,0.5)]">
                             <div className="grid size-26 place-items-center overflow-hidden">
-                                <Image src="/toji 3.jpg" alt="Profile Picture" loading="eager" className="size-full rounded-full" width={1080} height={1080} />
+                                <Image src={displayImage} alt="Profile Picture" loading="eager" className="size-full rounded-full" width={1080} height={1080} />
                             </div>
                         </div>
 
-                        <motion.div
-                            className="ring-background absolute -right-1 -bottom-1 flex items-center gap-0.5 rounded-full bg-orange-500 px-3 py-1 text-white shadow-lg ring-2"
-                            animate={{ scale: [1, 1.1, 1] }}
-                            transition={{ repeat: Infinity, duration: 2 }}
-                        >
+                        <motion.div className="ring-background absolute -right-1 -bottom-1 flex items-center gap-0.5 rounded-full bg-orange-500 px-3 py-1 text-white shadow-lg ring-2" animate={{ scale: [1, 1.1, 1] }} transition={{ repeat: Infinity, duration: 2 }}>
                             <Flame size={14} className="fill-white" />
                             <span className="text-xs font-black">{profile?.currentStreak}</span>
                         </motion.div>
@@ -142,17 +139,9 @@ function MileStones({ isUnlocked, icon: Icon, label, days, description, index }:
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: index * 0.1 }}
-            className={cn(
-                "group relative flex items-center gap-4 overflow-hidden rounded-[24px] border p-4 transition-all duration-500",
-                isUnlocked ? "border-blue-500/30 bg-blue-500/5 shadow-lg shadow-blue-500/5" : "bg-card/20 text-foreground/40 grayscale",
-            )}
+            className={cn("group relative flex items-center gap-4 overflow-hidden rounded-[24px] border p-4 transition-all duration-500", isUnlocked ? "border-blue-500/30 bg-blue-500/5 shadow-lg shadow-blue-500/5" : "bg-card/20 text-foreground/40 grayscale")}
         >
-            <div
-                className={cn(
-                    "flex size-12 shrink-0 items-center justify-center rounded-2xl border transition-all",
-                    isUnlocked ? "border-blue-400/30 bg-blue-500 text-white shadow-[0_0_15px_rgba(59,130,246,0.5)]" : "text-muted-foreground border-white/10 bg-white/5",
-                )}
-            >
+            <div className={cn("flex size-12 shrink-0 items-center justify-center rounded-2xl border transition-all", isUnlocked ? "border-blue-400/30 bg-blue-500 text-white shadow-[0_0_15px_rgba(59,130,246,0.5)]" : "text-muted-foreground border-white/10 bg-white/5")}>
                 <Icon className="size-6" />
             </div>
 

@@ -8,7 +8,7 @@ import Header from "@/components/common/header";
 export default function Home() {
     return (
         <OnboardingGuard>
-            <div className="space-y-4">
+            <div className="space-y-6">
                 <Header />
                 <WeekDisplay />
                 <StatsGrid />

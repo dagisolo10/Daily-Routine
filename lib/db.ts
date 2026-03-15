@@ -36,6 +36,7 @@ export interface Profile {
     id?: number;
     name: string;
     age?: number;
+    avatar?: Blob;
     currentStreak?: number;
     longestStreak?: number;
     perfectDays?: number;
