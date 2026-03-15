@@ -15,7 +15,7 @@ export default function DailyTasks() {
 
             <div className="space-y-4 pr-2 pb-32">
                 {tasks.length === 0 ? (
-                    <div className="flex h-48 w-full items-center justify-center rounded-2xl border-2 border-dashed bg-slate-200 dark:bg-slate-900">
+                    <div className="flex h-48 w-full items-center justify-center rounded-2xl border-2 border-dashed">
                         <div className="flex flex-col items-center gap-2">
                             <p className="text-3xl font-semibold">No tasks added yet</p>
                             <p className="text-muted-foreground font-medium">Add your first task</p>
